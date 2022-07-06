@@ -2,9 +2,9 @@
 {
     public class Product
     {
-        public int codigo { get; set; }
-        public string nome { get; set; }
-        public string descricao { get; set; }
-        public float preco { get; set; }
+        public int Codigo { get; set; }
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public float Preco { get; set; }
     }
 }

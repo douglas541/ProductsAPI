@@ -10,14 +10,18 @@ namespace ProductsAPI.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private static List<Product> products = new List<Product>();
+        private static readonly List<Product> products = new List<Product>();
 
-        [HttpGet("GetProduct")]
-        public async Task<ActionResult<List<Product>>> GetProduct(int codigo)
+        [HttpGet("GetProducts/{codigo}")]
+        public async Task<ActionResult<List<Product>>> GetProducts(int codigo)
         {
             try
             {
-                var product = products.Find(product => product.codigo == codigo);
+                var product = products.Find(product => product.Codigo == codigo);
+                if (product == null)
+                {
+                    return NotFound("File Not Found");
+                }
                 return Ok(product);
             }
             catch
@@ -33,11 +37,15 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpPost("AddProduct")]
-        public async Task<ActionResult<List<Product>>> AddProduct(Product product)
+        public async Task<ActionResult<List<Product>>> AddProduct(Product _product)
         {
             try
             {
-                products.Add(product);
+                var product = products.Find(product => product.Codigo == _product.Codigo);
+                if(product != null)
+                    return StatusCode(409, $"Product Already Exists");
+
+                products.Add(_product);
                 return Ok(products);
             } 
             catch
@@ -51,7 +59,7 @@ namespace ProductsAPI.Controllers
         {
             try
             {
-                var product = products.Find(product => product.codigo == codigo);
+                var product = products.Find(product => product.Codigo == codigo);
                 if (product == null)
                     return BadRequest(product);
 
@@ -70,14 +78,14 @@ namespace ProductsAPI.Controllers
         {
             try
             {
-                var product = products.Find(product => product.codigo == productRequest.codigo);
+                var product = products.Find(product => product.Codigo == productRequest.Codigo);
                 if (product == null)
-                    return BadRequest("Product not found!");
+                    return BadRequest("Product not found");
 
-                product.codigo = productRequest.codigo;
-                product.descricao = productRequest.descricao;
-                product.preco = productRequest.preco;
-                product.nome = productRequest.nome;
+                product.Codigo = productRequest.Codigo;
+                product.Descricao = productRequest.Descricao;
+                product.Preco = productRequest.Preco;
+                product.Nome = productRequest.Nome;
 
                 return Ok(products);
             }
