@@ -37,15 +37,15 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpPost("AddProduct")]
-        public async Task<ActionResult<List<Product>>> AddProduct(Product _product)
+        public async Task<ActionResult<List<Product>>> AddProduct(Product productRequest)
         {
             try
             {
-                var product = products.Find(product => product.Codigo == _product.Codigo);
+                var product = products.Find(product => product.Codigo == productRequest.Codigo);
                 if(product != null)
                     return StatusCode(409, $"Product Already Exists");
 
-                products.Add(_product);
+                products.Add(productRequest);
                 return Ok(products);
             } 
             catch
